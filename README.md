@@ -30,7 +30,7 @@ pip install deepface opencv-python numpy
 ### 2️⃣ Ejecución
 Clona este repositorio y ejecuta el script principal:
 ```sh
-git clone https://github.com/TU_USUARIO/CelebIA.git
+git clone https://github.com/ivan-rf22/Actividad_Paelllas.git
 cd CelebIA
 python main.py
 ```
