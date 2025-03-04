@@ -59,7 +59,7 @@ def hacer_json(lista_personas, n, lista_ruta_famosos, lista_nombre_famosos, list
     json_data = json.dumps(data, indent=4)
 
     # Escribir el JSON en un archivo
-    with open(f"json_persona{n+1}", "w") as json_file:
+    with open(f"personas/json_persona{n+1}.json", "w") as json_file:
         json_file.write(json_data)
 
 def sacar_nombre_ruta(lista_nombres):
