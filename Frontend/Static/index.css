@@ -1,0 +1,175 @@
+@font-face {
+    font-family: 'HollywoodHills';
+    src: url(../Static/fonts/HollywoodHills.ttf) format('truetype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+
+body {
+    width: 100%;
+    height: 100vh;
+    margin: 0; 
+    padding: 0;
+    background-color: #12273C;
+    margin: 0;
+    font-family: 'HollywoodHills', sans-serif;
+    color: white;
+}
+.logo{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.enunciado {
+    position: absolute; 
+    top: 35px;
+    left: 50%;
+    font-size: 90px;
+    width: 1275px;
+    height: 110px;
+    transform: translateX(-50%);
+}
+
+.linea {
+    position: absolute;
+    top: 80px; 
+    left: 50%;
+    width: 950px;
+    height: 113px;
+    transform: translateX(-50%); 
+}
+
+.título{
+    position: absolute;
+    top: 225px; 
+    left: 50%;
+    width: 658px; 
+    height: 183;
+    transform: translateX(-50%);
+
+}
+
+.rectangulo {
+    position: absolute;
+    top: 400px;
+    left: 50%;
+    width: 400px; 
+    height: 400px; 
+    background-color: #3498db; 
+    border-radius: 50px; 
+    border: 2px solid black; 
+    transform: translateX(-50%);
+    overflow: hidden;
+}
+
+.cuadrado1 {
+    position: absolute;
+    top: 420px;
+    left: 25%;
+    width: 300px; 
+    height: 300px; 
+    background-color: #3498db; 
+    border-radius: 50px; 
+    border: 2px solid black; 
+    transform: translateX(-50%);
+    overflow: hidden;
+}
+
+.cuadrado2 {
+    position: absolute;
+    top: 420px;
+    left: 50%;
+    width: 300px; 
+    height: 300px; 
+    background-color: #3498db; 
+    border-radius: 50px; 
+    border: 2px solid black; 
+    transform: translateX(-50%);
+    overflow: hidden;
+}
+
+.cuadrado3 {
+    position: absolute;
+    top: 420px;
+    left: 75%;
+    width: 300px; 
+    height: 300px; 
+    background-color: #3498db; 
+    border-radius: 50px; 
+    border: 2px solid black; 
+    transform: translateX(-50%);
+    overflow: hidden;
+}
+
+.cuadrado4 {
+    position: absolute;
+    top: 190px;
+    left: 15%;
+    width: 200px; 
+    height: 200px; 
+    background-color: #3498db; 
+    border-radius: 20px; 
+    border: 2px solid black; 
+    transform: translateX(-50%);
+    overflow: hidden;
+}
+
+.flechai {
+    position: absolute;
+    top: 520px;
+    left: 5%;
+    width: 100px;
+    height: 100px;
+}
+
+.flechad {
+    position: absolute;
+    top: 520px;
+    left: 89.7%;
+    width: 100px;
+    height: 100px;
+}
+
+#webcam {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+.boton {
+    position: absolute;
+    top: 820px;
+    left: 50%;
+    width: 300px; 
+    height: 45px; 
+    background-color: #D9D9D9; 
+    border-radius: 20px; 
+    border: 2px solid black; 
+    transform: translateX(-50%);
+    display: flex;            /* Activa el uso de flexbox */
+    justify-content: center;  /* Centra horizontalmente el contenido */
+    align-items: center;
+    font-family: 'HollywoodHills', sans-serif; 
+    font-size: 27px;
+}
+
+.robot{
+    position: absolute;
+    top: 512px;
+    left: 95%; 
+    transform: translateX(-95%);
+}
+
+.instagram{
+    position: absolute;
+    top: 850px;
+    left: 120px;
+    font-size: 20px;
+}
+.logo_insta{
+    position: absolute;
+    top: 850px;
+    left: 55PX;
+}

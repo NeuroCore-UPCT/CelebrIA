@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CelebrIA</title>
+    <link rel="icon" type="image/x-icon" href="../Static/img/faviconAsoIA.ico">
+    <link rel="stylesheet" href="../Static/index.css">
+
+</head>
+
+<body>
+    <center>
+    <img src="../Static/img/logoAsoIA.svg" alt="logo Asociación IA" class="logo">
+    <div class="enunciado">
+        Descubre qué famoso eres!
+        <img src="../Static/img/linea.svg" alt="linea" class="linea">        
+    </div>
+</center>
+    <img src="../Static/img/CelebrIA.svg" alt="CelebrIA" class="título">
+    
+    <div class="rectangulo">
+        <video id="webcam" autoplay></video>
+        
+    </div>
+    
+
+    <form id="captureForm" action="../static/index.js" method="POST" enctype="multipart/form-data">
+        <button type="button" class="boton" id="capturar-btn">CAPTURAR</button>
+    </form>
+
+    <img src="../Static/img/robot.svg" alt="Robot" class="robot">
+
+    <p class="instagram">
+        INSTA_ASOCIACION_IA
+    </p>
+    <img src="../Static/img/logo_insta.svg" alt="Instagram" class="logo_insta">
+
+    <canvas id="canvas" style="display: none;"></canvas>
+    <script src="../Static/index.js"></script> 
+</body>
+
+</html>
