@@ -1,39 +1,24 @@
-# CelebIA
+# CelebrIA 
 
-CelebIA es una aplicación interactiva que utiliza inteligencia artificial para analizar rostros en tiempo real y encontrar los tres famosos a los que más te pareces. Este proyecto ha sido desarrollado por la **Asociación de Estudiantes de IA de la UPCT** para el evento del **Día de las Paellas** de nuestra universidad.
+## Instalación y Uso
 
-## 📸 Características
-- Captura de imagen a través de una webcam con un solo toque.
-- Comparación facial basada en inteligencia artificial.
-- Identificación de los tres famosos más similares utilizando una base de datos propia.
-- Ejecución en local sin necesidad de conexión a internet.
-
-## 🛠 Tecnologías Utilizadas
-- **Lenguaje:** Python
-- **Backend:** [DeepFace](https://github.com/serengil/deepface) para el análisis facial
-- **Modelo de IA:** FaceNet para la extracción de embeddings faciales
-- **Base de Datos:** Conjunto propio de imágenes de famosos
-
-## ⚙️ Cómo Funciona
-1. El usuario presiona el botón táctil para tomar una foto con la webcam.
-2. La imagen capturada se procesa y se extraen sus embeddings faciales con **FaceNet**.
-3. Se comparan los embeddings con la base de datos de famosos mediante diferencia euclidiana.
-4. Se seleccionan y muestran en pantalla los tres famosos con menor diferencia.
-
-## 🚀 Instalación y Ejecución
-### 1️⃣ Prerrequisitos
-Asegúrate de tener **Python 3.8+** instalado junto con las siguientes dependencias:
-```sh
-pip install deepface opencv-python numpy
+1. Instala las dependencias:
+```
+pip install -r requirements.txt
 ```
 
-### 2️⃣ Ejecución
-Clona este repositorio y ejecuta el script principal:
-```sh
-git clone https://github.com/ivan-rf22/Actividad_Paelllas.git
-cd CelebIA
-python main.py
+2. Ejecuta la aplicación:
+```
+python app.py
 ```
 
-## 🎓 Créditos
-Este proyecto ha sido desarrollado por la **Asociación de Estudiantes de IA de la UPCT**.
+3. Abre tu navegador y ve a `http://localhost:5000`
+
+## Cómo usar la aplicación
+
+1. Haz clic en el botón "CAPTURAR" para tomar una foto con tu webcam.
+2. Espera mientras la aplicación procesa la imagen y encuentra coincidencias.
+3. Verás los resultados con los famosos a los que más te pareces.
+4. Si se detectan múltiples caras en la imagen, puedes navegar entre ellas usando las flechas izquierda y derecha.
+5. Para tomar otra foto, haz clic en el botón "TOMAR OTRA FOTO" en la parte inferior de la página de resultados.
+
