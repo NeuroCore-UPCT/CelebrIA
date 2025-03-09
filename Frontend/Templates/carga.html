@@ -4,25 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CelebrIA</title>
-    <link rel="icon" type="image/x-icon" href="../Static/img/faviconAsoIA.ico">
-    <link rel="stylesheet" href="../Static/index.css">
-    <script src="../Static/index.css"></script> 
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/faviconAsoIA.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
 
 <body>
-    <img src="../Static/img/logoAsoIA.svg" alt="logo Asociación IA" class="logo">
+    <img src="{{ url_for('static', filename='img/logoAsoIA.svg') }}" alt="logo Asociación IA" class="logo">
     <center>
     <div class="enunciado">
         Buscando coincidencias
-        <img src="../Static/img/linea.svg" alt="linea" class="linea">        
+        <img src="{{ url_for('static', filename='img/linea.svg') }}" alt="linea" class="linea">        
     </div>
 </center>
-    <img src="../Static/img/CelebrIA.svg" alt="CelebrIA" class="título">
+    <img src="{{ url_for('static', filename='img/CelebrIA.svg') }}" alt="CelebrIA" class="título">
     
-    <div class="rectangulo" href="../Static/index.js">
-        <video id="webcam" autoplay></video>
+    <div class="rectangulo">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Analizando tu imagen...</p>
     </div>
-    <script src="../Static/carga.js"></script>
+    <script src="{{ url_for('static', filename='carga.js') }}"></script>
 
 </body>
 

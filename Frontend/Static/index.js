@@ -10,13 +10,14 @@ async function startWebcam() {
         video.srcObject = stream;
     } catch (err) {
         console.error("Error al acceder a la cámara", err);
+        alert("No se pudo acceder a la cámara. Por favor, asegúrate de que tienes una cámara conectada y has dado permiso para usarla.");
     }
 }
 
 startWebcam();
 
 // Capturar la imagen cuando se haga clic en el botón
-document.getElementById("capturar-btn").addEventListener("click", () => {
+document.getElementById("capturar-btn").addEventListener("click", async () => {
     // Ajustar el tamaño del canvas según el tamaño del video
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -27,9 +28,33 @@ document.getElementById("capturar-btn").addEventListener("click", () => {
     // Obtener la imagen en formato base64 (data URL)
     const imageData = canvas.toDataURL("image/png");
 
-    // Guardar la imagen en localStorage (esto es temporal y no es un archivo físico)
-    localStorage.setItem("captura", imageData);
-
-    // Redirigir a la siguiente página (sin mostrar la imagen)
-    window.location.href = "../Templates/carga.html";
+    try {
+        // Limpiar cualquier resultado anterior
+        await fetch('/clear_data', {
+            method: 'POST',
+        });
+        
+        // Mostrar pantalla de carga antes de enviar la imagen
+        // Esto evita que se muestre un error si la petición tarda en procesarse
+        window.location.href = "/carga";
+        
+        // Enviar la imagen al servidor en segundo plano
+        // No esperamos la respuesta aquí, la página de carga se encargará de comprobar el estado
+        fetch('/process_image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ image: imageData }),
+        }).catch(error => {
+            console.error('Error en segundo plano:', error);
+            // No mostramos alerta aquí porque ya estamos en la página de carga
+        });
+        
+        // No esperamos la respuesta aquí, la página de carga se encargará de comprobar el estado
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al preparar la imagen. Por favor, inténtalo de nuevo.');
+        // No redirigimos en caso de error para que el usuario pueda intentarlo de nuevo
+    }
 });

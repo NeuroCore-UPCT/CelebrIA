@@ -1,0 +1,398 @@
+from flask import Flask, render_template, request, jsonify, redirect, url_for, send_from_directory
+import os
+import cv2
+import base64
+import numpy as np
+import json
+from deepface import DeepFace
+import pandas as pd
+from PIL import Image
+import shutil
+import time
+
+app = Flask(__name__, 
+            static_folder='Frontend/Static',
+            template_folder='Frontend/Templates')
+
+# Ensure the personas directory exists
+os.makedirs('personas', exist_ok=True)
+
+# Ensure the face-db directory exists
+os.makedirs('face-db', exist_ok=True)
+
+@app.route('/')
+def index():
+    """Render the main page with webcam capture"""
+    return render_template('index.html')
+
+@app.route('/carga')
+def carga():
+    """Render the loading page"""
+    return render_template('carga.html')
+
+@app.route('/resultado')
+def resultado():
+    """Render the results page"""
+    return render_template('resultado.html')
+
+@app.route('/process_image', methods=['POST'])
+def process_image():
+    """Process the captured image and find celebrity matches"""
+    try:
+        # Get the image data from the request
+        image_data = request.json.get('image')
+        
+        # Remove the data URL prefix
+        image_data = image_data.split(',')[1]
+        
+        # Decode the base64 image
+        image_bytes = base64.b64decode(image_data)
+        
+        # Convert to numpy array
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        
+        # Decode the image
+        image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        
+        # Save the original image
+        original_path = "personas/foto.jpg"
+        cv2.imwrite(original_path, image)
+        
+        # Process the image and wait for results
+        results = procesar_imagen(original_path)
+        
+        # Check if we have valid results
+        if not results or len(results) == 0:
+            return jsonify({"success": False, "error": "No faces detected or no matches found"})
+            
+        # Check if each result has matches
+        for result in results:
+            if not result["matches"] or len(result["matches"]) == 0:
+                return jsonify({"success": False, "error": "No matches found for detected faces"})
+        
+        return jsonify({"success": True, "redirect": "/resultado"})
+    
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+@app.route('/get_results')
+def get_results():
+    """Get the results from the JSON files"""
+    try:
+        results = []
+        # Read all JSON files in the personas directory
+        for file in os.listdir('personas'):
+            if file.startswith('json_persona') and file.endswith('.json'):
+                with open(os.path.join('personas', file), 'r') as f:
+                    results.append(json.load(f))
+        
+        return jsonify(results)
+    
+    except Exception as e:
+        return jsonify({"error": str(e)})
+
+@app.route('/face-db/<path:filename>')
+def serve_image(filename):
+    """Serve images from the face-db directory"""
+    return send_from_directory('face-db', filename)
+
+@app.route('/personas/<path:filename>')
+def serve_persona_image(filename):
+    """Serve images from the personas directory"""
+    return send_from_directory('personas', filename)
+
+@app.route('/clear_data', methods=['POST'])
+def clear_data():
+    """Clear the data in the personas directory"""
+    try:
+        # Ensure the personas directory exists
+        os.makedirs('personas', exist_ok=True)
+        
+        # Delete all files in the personas directory
+        borrar_contenido_carpeta_flask("personas")
+        
+        # Return success response
+        return jsonify({"success": True, "message": "Data cleared successfully"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+@app.route('/process_status', methods=['GET'])
+def process_status():
+    """Check the status of the image processing"""
+    try:
+        # Check if the original image exists
+        if not os.path.exists('personas/foto.jpg'):
+            return jsonify({
+                "status": "waiting", 
+                "message": "Esperando imagen..."
+            })
+        
+        # Check if there are any JSON files in the personas directory
+        json_files = [f for f in os.listdir('personas') if f.startswith('json_persona') and f.endswith('.json')]
+        
+        if not json_files:
+            # Check if face detection has started
+            face_files = [f for f in os.listdir('personas') if f.startswith('foto') and f.endswith('.jpg') and f != 'foto.jpg']
+            if face_files:
+                return jsonify({
+                    "status": "processing", 
+                    "message": "Buscando coincidencias..."
+                })
+            else:
+                return jsonify({
+                    "status": "processing", 
+                    "message": "Detectando rostros..."
+                })
+        
+        # Read the first JSON file to check if it has matches
+        with open(os.path.join('personas', json_files[0]), 'r') as f:
+            data = json.load(f)
+        
+        if not data.get('matches') or len(data.get('matches', [])) == 0:
+            return jsonify({
+                "status": "error", 
+                "message": "No se encontraron coincidencias"
+            })
+        
+        return jsonify({
+            "status": "complete", 
+            "message": "Procesamiento completado"
+        })
+    
+    except Exception as e:
+        return jsonify({
+            "status": "error", 
+            "message": f"Error: {str(e)}"
+        })
+
+# Backend functions adapted from proyecto_paellas_def.py
+
+def detectar_personas(ruta_front):
+    """
+    Detecta las caras en una imagen y guarda cada cara detectada como una imagen separada.
+    
+    :param ruta_front: Ruta de la imagen donde se detectarán las caras.
+    :return: Lista de rutas de las imágenes de las caras detectadas.
+    """
+    try:
+        # Intentar extraer caras de la imagen
+        faces = DeepFace.extract_faces(ruta_front, enforce_detection=False)
+        lista_rutas = []
+        
+        if not faces or len(faces) == 0:
+            print("No faces detected, using original image")
+            # Si no se detectan caras, usar la imagen original
+            shutil.copy(ruta_front, "personas/foto0.jpg")
+            lista_rutas.append("personas/foto0.jpg")
+        else:
+            # Procesar cada cara detectada
+            for i in range(len(faces)):
+                face_array = faces[i]['face']  # Obtener el array de la cara detectada
+                face_array = (face_array * 255).astype(np.uint8)  # Convertir a formato de imagen
+                face_image = Image.fromarray(face_array)  # Convertir el array en una imagen PIL
+                face_image.save(f"personas/foto{i}.jpg")  # Guardar la imagen
+                lista_rutas.append(f"personas/foto{i}.jpg")  # Añadir la ruta a la lista
+    
+    except Exception as e:
+        print(f"Error detecting faces: {e}")
+        # En caso de error, usar la imagen original
+        shutil.copy(ruta_front, "personas/foto0.jpg")
+        lista_rutas = ["personas/foto0.jpg"]
+    
+    return lista_rutas
+
+def hacer_json(lista_personas, n, lista_ruta_famosos, lista_nombre_famosos, lista_parecidos):
+    """
+    Crea un archivo JSON con la información de las personas detectadas y sus coincidencias.
+    
+    :param lista_personas: Lista de rutas de las imágenes de las personas detectadas.
+    :param n: Índice de la persona actual en la lista.
+    :param lista_ruta_famosos: Lista de rutas de las imágenes de los famosos parecidos.
+    :param lista_nombre_famosos: Lista de nombres de los famosos parecidos.
+    :param lista_parecidos: Lista de porcentajes de similitud con los famosos.
+    """
+    # Siempre usar la imagen original para mostrar en el cuadrado pequeño
+    original_image = "personas/foto.jpg"
+    
+    if len(lista_personas) > 1:
+        data = {
+            "n_personas": len(lista_personas),  # Número de personas detectadas
+            "persona": original_image,  # Ruta de la imagen original
+            "cara_detectada": lista_personas[n],  # Ruta de la cara detectada
+            "matches": []
+        }
+    elif len(lista_personas) == 1:
+        data = {
+            "n_personas": len(lista_personas),  # Número de personas detectadas
+            "persona": original_image,  # Ruta de la imagen original
+            "cara_detectada": lista_personas[0],  # Ruta de la cara detectada
+            "matches": []
+        }
+    for i in range(len(lista_nombre_famosos)):
+        data["matches"].append({
+                "name": lista_nombre_famosos[i],  # Nombre del famoso parecido
+                "similarity": lista_parecidos[i],  # Porcentaje de similitud
+                "image_data": lista_ruta_famosos[i]  # Ruta de la imagen del famoso
+            })
+
+    # Convertir el diccionario a formato JSON
+    json_data = json.dumps(data, indent=4)
+
+    # Escribir el JSON en un archivo
+    with open(f"personas/json_persona{n+1}.json", "w") as json_file:
+        json_file.write(json_data)
+
+def sacar_nombre_ruta(lista_nombres):
+    """
+    Extrae los nombres de las rutas de las imágenes de los famosos.
+    
+    :param lista_nombres: Lista de rutas de las imágenes de los famosos.
+    :return: Lista de nombres de los famosos.
+    """
+    nombres = []
+    for i in range(len(lista_nombres)):
+        cadena = lista_nombres[i]
+        if cadena[8] == "@":
+            nombre = cadena.split('/')[1].replace('.jpg', '')  # Extraer nombre si la ruta contiene '@'
+        else:    
+            nombre = cadena.split('/')[1].split('.')[0].replace('_', ' ')  # Extraer nombre y reemplazar '_' con espacios
+        nombres.append(nombre)
+    return nombres
+
+def encontrar_3_mas_parecidos(ruta):
+    """
+    Encuentra las 3 imágenes más parecidas en la base de datos de caras.
+    
+    :param ruta: Ruta de la imagen de la persona a comparar.
+    :return: Lista de rutas de las imágenes más parecidas y sus porcentajes de similitud.
+    """
+    start_time = time.time()
+    print(f"Searching {ruta} in {len(os.listdir('face-db'))} length datastore")
+    
+    # Check if face-db is empty and add sample images if needed
+    if len(os.listdir('face-db')) == 0:
+        print("face-db is empty, adding sample images")
+        add_sample_images_to_db()
+    
+    try:
+        # Intentar encontrar coincidencias
+        search = DeepFace.find(img_path=ruta, db_path="face-db/", model_name="VGG-Face", enforce_detection=False)
+        df = pd.concat(search, ignore_index=True) if search else pd.DataFrame()
+        
+        if df.empty:
+            print("No matches found, using empty results")
+            # Si no hay coincidencias, devolver listas vacías
+            rutas_imagen = []
+            porcentage_parecidos = []
+        else:
+            # Ordenar por similitud (menor distancia primero)
+            df_sorted = df.sort_values(by="distance", ascending=True)
+            # Obtener las 3 rutas más parecidas
+            rutas_imagen = list(df_sorted['identity'][:3])
+            # Calcular porcentajes de similitud
+            porcentage_parecidos = list(round(((1 - df_sorted['distance'][:3]) * 100), 2))
+    
+    except Exception as e:
+        print(f"Error finding matches: {e}")
+        # En caso de error, devolver listas vacías
+        rutas_imagen = []
+        porcentage_parecidos = []
+    
+    print(f"find function duration {time.time() - start_time} seconds")
+    return rutas_imagen, porcentage_parecidos
+
+def add_sample_images_to_db():
+    """
+    Añade imágenes de muestra a la base de datos si está vacía
+    """
+    # Crear imágenes de muestra para pruebas
+    sample_images = {
+        "Aamir_Khan.jpg": (0, 0, 255),  # Azul
+        "Fawad_Khan.jpg": (0, 255, 0),  # Verde
+        "Barbara_Hershey.jpg": (255, 0, 0)  # Rojo
+    }
+    
+    for name, color in sample_images.items():
+        # Crear una imagen de color sólido
+        img = np.ones((300, 300, 3), dtype=np.uint8)
+        img[:, :] = color
+        
+        # Añadir texto con el nombre
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        text = name.replace('.jpg', '').replace('_', ' ')
+        text_size = cv2.getTextSize(text, font, 1, 2)[0]
+        text_x = (img.shape[1] - text_size[0]) // 2
+        text_y = (img.shape[0] + text_size[1]) // 2
+        cv2.putText(img, text, (text_x, text_y), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
+        
+        # Guardar la imagen en face-db
+        cv2.imwrite(os.path.join('face-db', name), img)
+        print(f"Created sample image: {name}")
+        
+    # Crear una representación de la base de datos para DeepFace
+    print("Creating DeepFace database representation...")
+    try:
+        DeepFace.build_model("VGG-Face")
+        representations = DeepFace.find(img_path="personas/foto.jpg", db_path="face-db/", model_name="VGG-Face", enforce_detection=False)
+        print("DeepFace database representation created successfully")
+    except Exception as e:
+        print(f"Error creating DeepFace database representation: {e}")
+        # Si falla, intentar con otra estrategia
+        try:
+            for file in os.listdir('face-db'):
+                if file.endswith('.jpg'):
+                    img_path = os.path.join('face-db', file)
+                    DeepFace.represent(img_path=img_path, model_name="VGG-Face", enforce_detection=False)
+            print("DeepFace database representation created using alternative method")
+        except Exception as e2:
+            print(f"Error creating DeepFace database using alternative method: {e2}")
+
+def procesar_imagen(original_path):
+    """Process the image and return the results"""
+    lista_personas = detectar_personas(original_path)
+    results = []
+    for i in range(len(lista_personas)):
+        lista_ruta_famosos, lista_parecidos = encontrar_3_mas_parecidos(lista_personas[i])
+        lista_nombre_famosos = sacar_nombre_ruta(lista_ruta_famosos)
+        hacer_json(lista_personas, i, lista_ruta_famosos, lista_nombre_famosos, lista_parecidos)
+        
+        # Create a result object for this person
+        person_result = {
+            "persona": original_path,  # Ruta de la imagen original
+            "cara_detectada": lista_personas[i],  # Ruta de la cara detectada
+            "matches": []
+        }
+        
+        for j in range(len(lista_nombre_famosos)):
+            person_result["matches"].append({
+                "name": lista_nombre_famosos[j],
+                "similarity": lista_parecidos[j],
+                "image_data": lista_ruta_famosos[j]
+            })
+        
+        results.append(person_result)
+    
+    return results
+
+def borrar_contenido_carpeta_flask(carpeta):
+    """
+    Borra el contenido de una carpeta (versión para Flask)
+    
+    :param carpeta: Ruta de la carpeta a borrar
+    """
+    if os.path.exists(carpeta) and os.path.isdir(carpeta):
+        for archivo in os.listdir(carpeta):
+            archivo_path = os.path.join(carpeta, archivo)
+            try:
+                if os.path.isdir(archivo_path):
+                    shutil.rmtree(archivo_path)  # Borrar subcarpeta
+                else:
+                    os.remove(archivo_path)  # Borrar archivo
+            except Exception as e:
+                print(f"No se pudo borrar {archivo_path}: {e}")
+        print(f"Contenido de la carpeta '{carpeta}' ha sido borrado.")
+    else:
+        print(f"La carpeta {carpeta} no existe o no es una carpeta válida.")
+
+if __name__ == '__main__':
+    app.run(debug=True) 
