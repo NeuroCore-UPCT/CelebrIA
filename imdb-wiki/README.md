@@ -1,32 +1,19 @@
-# Buscador de Celebridades Similares 🌟
+# IMDB WIKI 16K
 
-Este proyecto te permite encontrar celebridades que se parecen a ti utilizando reconocimiento facial y aprendizaje profundo.
-
-## Requisitos Previos 📋
-
-- Python 3.8 o superior
-- Webcam (opcional, puedes usar fotos existentes)
-- Aproximadamente 10GB de espacio libre en disco
-
-## Configuración del Entorno Virtual 🛠️
-
-1. Crear un entorno virtual:
-```bash
-# Windows
+# Crear el entorno
 python -m venv venv
+
+# Activar el entorno
 .\venv\Scripts\activate
 
-# Linux/Mac
-python3 -m venv venv
-source venv/bin/activate
-```
 
-2. Instalar las dependencias:
+### Instalación de Dependencias
+
+2. Instalar las dependencias del proyecto:
 ```bash
 pip install -r requirements.txt
 ```
 
-## Descarga de Datos Necesarios 📥
 
 1. Descargar el archivo de embeddings (representaciones faciales):
    - Enlace: https://drive.google.com/file/d/1-iSebNCzniQ09pmz5vjrvedIBy-LBEs6/view?usp=sharing
@@ -37,7 +24,7 @@ pip install -r requirements.txt
    - Descargar "faces only" (aproximadamente 7GB)
    - Extraer en una carpeta llamada `imdb_data_set`
 
-## Uso del Programa 🚀
+## Uso del Programa 
 
 ### Modo Básico (usando webcam):
 ```bash
@@ -74,7 +61,7 @@ python celebrity2.py --photo mi_foto.jpg
 python celebrity2.py --gender f
 ```
 
-## Estructura de Archivos 📁
+## Estructura de Archivos 
 
 ```
 .
@@ -84,30 +71,6 @@ python celebrity2.py --gender f
 └── imdb_data_set/        # Directorio con imágenes de celebridades
 ```
 
-## Solución de Problemas Comunes ⚠️
 
-1. Error de OpenCV:
-   - Asegúrate de tener una webcam conectada
-   - Prueba con una foto existente usando --photo
 
-2. Error de memoria:
-   - El archivo de embeddings requiere aproximadamente 4GB de RAM
-   - Cierra otras aplicaciones que consuman mucha memoria
-
-3. Error al cargar representations.pkl:
-   - Verifica que hayas descargado el archivo correcto
-   - Asegúrate de que está en el mismo directorio que celebrity2.py
-
-## Notas Importantes 📝
-
-- La primera ejecución puede ser lenta mientras se cargan los modelos
-- Las fotos deben tener un rostro claramente visible
-- La calidad de las coincidencias depende de la iluminación y el ángulo de la foto
-- Los resultados se guardan automáticamente como 'celebrity_lookalikes_result.jpg'
-
-## Créditos 🙏
-
-- Dataset IMDB-WIKI: https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/
-- DeepFace framework
-- VGGFace model
 
