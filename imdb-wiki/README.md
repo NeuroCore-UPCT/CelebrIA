@@ -1,11 +1,14 @@
 # IMDB WIKI 16K
 
-# Crear el entorno
+### Crear el entorno
+```
 python -m venv venv
+```
 
-# Activar el entorno
+### Activar el entorno
+```
 .\venv\Scripts\activate
-
+```
 
 ### Instalación de Dependencias
 
