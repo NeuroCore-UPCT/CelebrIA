@@ -1,0 +1,33 @@
+@import 'base.css';
+
+.cuadrado1, .cuadrado2, .cuadrado3, .cuadrado4 {
+    width: 20vw;
+    height: 20vw;
+    min-width: 150px;
+    min-height: 150px;
+    border: 2px solid white;
+    border-radius: 10px;
+    margin: 0 1vw;
+    overflow: hidden;
+}
+
+.flechai, .flechad {
+    width: 4vw;
+    min-width: 30px;
+    max-width: 50px;
+    cursor: pointer;
+}
+
+.take-another-btn {
+    margin-top: 3vh;
+    width: 20vw;
+    min-width: 150px;
+    max-width: 250px;
+    height: 4vh;
+    min-height: 40px;
+    border-radius: 25px;
+    font-size: 2.5vh;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+} 

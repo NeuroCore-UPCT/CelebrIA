@@ -5,210 +5,91 @@
     font-weight: normal;
 }
 
-
 body {
     width: 100%;
     height: 100vh;
     margin: 0; 
     padding: 0;
     background-color: #12273C;
-    margin: 0;
     font-family: 'HollywoodHills', sans-serif;
     color: white;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
-.logo{
+
+/* Header section */
+.header {
+    position: relative;
+    width: 100%;
+    height: 15vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.logo {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 2vh;
+    left: 3vw;
+    width: 7vw;
+    max-width: 100px;
+    height: auto;
 }
 
 .enunciado {
-    position: absolute; 
-    top: 35px;
-    left: 50%;
-    font-size: 90px;
-    width: 1275px;
-    height: 110px;
-    transform: translateX(-50%);
+    position: relative;
+    margin-top: 4vh;
+    font-size: 4vw;
+    width: 80vw;
+    max-width: 1000px;
+    text-align: center;
 }
 
 .linea {
-    position: absolute;
-    top: 80px; 
-    left: 50%;
-    width: 950px;
-    height: 113px;
-    transform: translateX(-50%); 
-}
-
-.título{
-    position: absolute;
-    top: 225px; 
-    left: 50%;
-    width: 658px; 
-    height: 183;
-    transform: translateX(-50%);
-
-}
-
-.rectangulo {
-    position: absolute;
-    top: 400px;
-    left: 50%;
-    width: 400px; 
-    height: 400px; 
-    background-color: #3498db; 
-    border-radius: 50px; 
-    border: 2px solid black; 
-    transform: translateX(-50%);
-    overflow: hidden;
-}
-
-.cuadrado1 {
-    position: absolute;
-    top: 420px;
-    left: 25%;
-    width: 300px; 
-    height: 300px; 
-    background-color: #3498db; 
-    border-radius: 50px; 
-    border: 2px solid black; 
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-}
-
-.cuadrado2 {
-    position: absolute;
-    top: 420px;
-    left: 50%;
-    width: 300px; 
-    height: 300px; 
-    background-color: #3498db; 
-    border-radius: 50px; 
-    border: 2px solid black; 
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-}
-
-.cuadrado3 {
-    position: absolute;
-    top: 420px;
-    left: 75%;
-    width: 300px; 
-    height: 300px; 
-    background-color: #3498db; 
-    border-radius: 50px; 
-    border: 2px solid black; 
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-}
-
-.cuadrado4 {
-    position: absolute;
-    top: 190px;
-    left: 15%;
-    width: 200px; 
-    height: 200px; 
-    background-color: #3498db; 
-    border-radius: 20px; 
-    border: 2px solid black; 
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 5px;
-}
-
-/* Special styling for the user's photo in cuadrado4 */
-.cuadrado4 .persona-img {
-    max-width: 95%;
-    max-height: 95%;
-    object-fit: contain;
-    border-radius: 10px;
-    border: 2px solid #3498db;
-}
-
-.persona-img, .famous-img {
-    max-width: 90%;
-    max-height: 70%;
-    object-fit: contain;
+    position: relative;
     display: block;
-    margin: 0 auto;
-    border-radius: 10px;
+    width: 65vw;
+    max-width: 800px;
+    height: auto;
+    margin: 1vh auto 0;
 }
 
-.famous-info {
-    text-align: center;
-    margin-top: 10px;
+/* Main content section */
+.main-content {
+    position: relative;
+    width: 100%;
+    height: 75vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.título {
+    width: 35vw;
+    max-width: 500px;
+    height: auto;
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+}
+
+.camera-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
 }
 
-.famous-name {
-    font-weight: bold;
-    font-size: 18px;
-    margin: 5px 0;
-    color: #fff;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-}
-
-.famous-similarity {
-    font-size: 16px;
-    color: #fff;
-    margin: 5px 0;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-}
-
-.flechai {
-    position: absolute;
-    top: 420px;
-    left: 5%;
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    z-index: 100;
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
-    transition: transform 0.2s;
-}
-
-.flechad {
-    position: absolute;
-    top: 420px;
-    right: 5%;
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    z-index: 100;
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
-    transition: transform 0.2s;
-}
-
-.flechai:hover, .flechad:hover {
-    transform: scale(1.1);
-}
-
-.flechai:active, .flechad:active {
-    transform: scale(0.95);
+.rectangulo {
+    width: 45vw;
+    max-width: 600px;
+    height: 45vh;
+    background-color: #3498db; 
+    border-radius: 3vw; 
+    border: 0.15vw solid black; 
+    overflow: hidden;
+    margin-bottom: 2vh;
 }
 
 #webcam {
@@ -218,58 +99,226 @@ body {
 }
 
 .boton {
-    position: absolute;
-    top: 820px;
-    left: 50%;
-    width: 300px; 
-    height: 45px; 
+    width: 20vw;
+    max-width: 250px;
+    height: 5vh;
+    min-height: 40px;
     background-color: #D9D9D9; 
-    border-radius: 20px; 
-    border: 2px solid black; 
-    transform: translateX(-50%);
-    display: flex;            /* Activa el uso de flexbox */
-    justify-content: center;  /* Centra horizontalmente el contenido */
+    border-radius: 1.5vw; 
+    border: 0.15vw solid black; 
+    display: flex;
+    justify-content: center;
     align-items: center;
     font-family: 'HollywoodHills', sans-serif; 
-    font-size: 27px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-top: 3vh;
+    margin-bottom: 2vh;
 }
 
-.robot{
-    position: absolute;
-    top: 512px;
-    left: 95%; 
-    transform: translateX(-95%);
+.robot {
+    position: fixed;
+    bottom: 1vh;
+    right: 3vw;
+    width: 25vw;
+    max-width: 300px;
+    min-width: 200px;
+    height: auto;
+    z-index: 10;
 }
 
-.instagram{
-    position: absolute;
-    top: 850px;
-    left: 120px;
-    font-size: 20px;
+/* Footer section */
+.footer {
+    position: fixed;
+    width: 100%;
+    height: auto;
+    bottom: 0;
+    left: 0;
+    z-index: 20;
 }
-.logo_insta{
+
+.social-media {
     position: absolute;
-    top: 850px;
-    left: 55PX;
+    bottom: 1vh;
+    left: 3vw;
+    display: flex;
+    align-items: center;
+}
+
+.logo_insta {
+    width: 4vw;
+    max-width: 40px;
+    height: auto;
+}
+
+.instagram {
+    margin: 0 0 0 1vw;
+    font-size: 1.2rem;
+}
+
+/* Existing styles for other elements */
+.cuadrado1, .cuadrado2, .cuadrado3 {
+    position: absolute;
+    top: 38vh;
+    width: 24vw;
+    max-width: 300px;
+    height: 30vh;
+    max-height: 300px;
+    background-color: #3498db; 
+    border-radius: 3vw; 
+    border: 0.15vw solid black; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.1);
+    padding: 1vh;
+}
+
+.cuadrado1 {
+    left: 25%;
+    transform: translateX(-50%);
+}
+
+.cuadrado2 {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.cuadrado3 {
+    left: 75%;
+    transform: translateX(-50%);
+}
+
+.cuadrado4 {
+    position: absolute;
+    top: 15vh;
+    left: 15%;
+    width: 16vw;
+    max-width: 200px;
+    height: 20vh;
+    max-height: 200px;
+    background-color: #3498db; 
+    border-radius: 1.5vw; 
+    border: 0.15vw solid black; 
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.1);
+    padding: 0.5vh;
+}
+
+/* Special styling for the user's photo in cuadrado4 */
+.cuadrado4 .persona-img {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
+    border-radius: 1vw;
+    border: 0.15vw solid #3498db;
+}
+
+.persona-img, .famous-img {
+    max-width: 90%;
+    max-height: 70%;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    border-radius: 1vw;
+}
+
+.famous-info {
+    text-align: center;
+    margin-top: 1vh;
+    width: 100%;
+}
+
+.famous-name {
+    font-family: Arial Black;
+    font-weight: normal;
+    font-size: 1.2rem;
+    margin: 0.5vh 0;
+    color: #fff;
+    text-shadow: 0.05vw 0.05vw 0.1vw rgba(0, 0, 0, 0.4);
+}
+
+.famous-similarity {
+    font-family: Arial Black;
+    font-size: 0.9rem;
+    color: #fff;
+    margin: 0.5vh 0;
+    text-shadow: 0.05vw 0.05vw 0.1vw rgba(0, 0, 0, 0.2);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+}
+
+/* Modificar estilos de las flechas para usar SVG correctos y hacer más pequeñas */
+.flechai, .flechad {
+    position: absolute;
+    top: 38vh;
+    width: 3.5vw;
+    max-width: 50px;
+    height: auto;
+    cursor: pointer;
+    z-index: 999;
+    filter: drop-shadow(0.2vw 0.2vw 0.3vw rgba(0, 0, 0, 0.5));
+    transition: transform 0.2s;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #3498db;
+    display: block;
+    background-image: url('/Static/img/caret-cuadrado-derecha.svg');
+    background-size: 60% 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.flechai {
+    left: 3vw;
+    transform: scaleX(-1);
+}
+
+.flechad {
+    right: 3vw;
+}
+
+.flechai:hover {
+    transform: scaleX(-1) scale(1.1);
+}
+
+.flechai:active {
+    transform: scaleX(-1) scale(0.95);
+}
+
+/* SVG interior - color del icono */
+.flechai svg path, .flechad svg path {
+    fill: #3498db;
 }
 
 /* Add CSS for the loading spinner */
 .loading-spinner {
-    border: 8px solid #f3f3f3;
-    border-top: 8px solid #3498db;
+    border: 0.6vw solid #f3f3f3;
+    border-top: 0.6vw solid #3498db;
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
+    width: 8vh;
+    height: 8vh;
     animation: spin 2s linear infinite;
     margin: 0 auto;
-    margin-top: 50px;
+    margin-top: 5vh;
 }
 
 .loading-text {
     text-align: center;
-    font-size: 24px;
-    margin-top: 20px;
-    color: #333;
+    font-size: 1.5rem;
+    margin-top: 2vh;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    font-weight: bold;
+    padding: 1vh 2vw;
 }
 
 @keyframes spin {
@@ -279,13 +328,13 @@ body {
 
 .back-button {
     display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
+    margin: 2vh auto;
+    padding: 1vh 1.5vw;
     background-color: #3498db;
     color: white;
     border: none;
-    border-radius: 5px;
-    font-size: 16px;
+    border-radius: 0.5vw;
+    font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -295,49 +344,84 @@ body {
 }
 
 .take-another-btn {
-    display: block;
-    margin: 20px auto;
-    padding: 15px 30px;
-    background-color: #3498db;
-    color: white;
-    border: none;
+    position: relative;
+    width: 20vw;
+    min-width: 200px;
+    max-width: 250px;
+    height: 4vh;
+    background: #FFFFFF;
+    border: 2px solid #000000;
     border-radius: 10px;
-    font-size: 18px;
-    font-weight: bold;
+    font-weight: 400;
+    font-size: 1.2em;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    position: absolute;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
-}
-
-.take-another-btn:hover {
-    background-color: #2980b9;
-    transform: translateX(-50%) scale(1.05);
-}
-
-.take-another-btn:active {
-    transform: translateX(-50%) scale(0.98);
 }
 
 .person-counter {
-    display: inline-block;
-    margin-left: 15px;
-    padding: 5px 10px;
+    display: block;
+    position: absolute;
+    top: 18vh;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5vh 1vw;
     background-color: #3498db;
     color: white;
-    border-radius: 15px;
-    font-size: 16px;
+    border-radius: 1.5vw;
+    font-size: 1rem;
     font-weight: bold;
+    z-index: 50;
+    margin-top: 2vh;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .cara-detectada {
     max-width: 95%;
     max-height: 95%;
     object-fit: cover;
-    border-radius: 10px;
-    border: 2px solid #3498db;
+    border-radius: 1vw;
+    border: 0.15vw solid #3498db;
+}
+
+/* Add this to ensure the body fits without scrolling */
+html, body {
+    height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.photos-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 2vh;
+}
+
+.photos-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 3vh;
+}
+
+.button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+}
+
+.button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 5vh;
+    position: fixed;
+    bottom: 7vh;
+}
+
+.boton {
+    position: relative;
+    margin: 0 auto;
 }

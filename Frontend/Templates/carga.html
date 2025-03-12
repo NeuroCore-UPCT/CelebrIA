@@ -9,21 +9,37 @@
 </head>
 
 <body>
-    <img src="{{ url_for('static', filename='img/logoAsoIA.svg') }}" alt="logo Asociación IA" class="logo">
-    <center>
-    <div class="enunciado">
-        Buscando coincidencias
-        <img src="{{ url_for('static', filename='img/linea.svg') }}" alt="linea" class="linea">        
+    <!-- Header section -->
+    <div class="header">
+        <img src="{{ url_for('static', filename='img/logoAsoIA.svg') }}" alt="logo Asociación IA" class="logo">
+        <div class="enunciado">
+            Buscando coincidencias
+            <img src="{{ url_for('static', filename='img/linea.svg') }}" alt="linea" class="linea">        
+        </div>
     </div>
-</center>
-    <img src="{{ url_for('static', filename='img/CelebrIA.svg') }}" alt="CelebrIA" class="título">
     
-    <div class="rectangulo">
-        <div class="loading-spinner"></div>
-        <p class="loading-text">Analizando tu imagen...</p>
+    <!-- Main content section -->
+    <div class="main-content">
+        <img src="{{ url_for('static', filename='img/CelebrIA.svg') }}" alt="CelebrIA" class="título">
+        
+        <div class="camera-container">
+            <div class="rectangulo">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Analizando tu imagen...</p>
+            </div>
+        </div>
+        
+        <img src="{{ url_for('static', filename='img/robot.svg') }}" alt="Robot" class="robot">
     </div>
+    
+    <!-- Footer section -->
+    <div class="footer">
+        <div class="social-media">
+            <img src="{{ url_for('static', filename='img/logo_insta.svg') }}" alt="Instagram" class="logo_insta">
+            <p class="instagram">UPCT_AI</p>
+        </div>
+    </div>
+
     <script src="{{ url_for('static', filename='carga.js') }}"></script>
-
 </body>
-
 </html>

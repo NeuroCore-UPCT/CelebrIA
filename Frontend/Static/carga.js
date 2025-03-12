@@ -2,10 +2,11 @@
 // y luego redirigir a la página de resultados
 
 // Variable para controlar el tiempo máximo de espera (en milisegundos)
-const MAX_WAIT_TIME = 60000; // 60 segundos
+const MAX_WAIT_TIME = 120000; // 120 segundos (2 minutos)
 let startTime = Date.now();
 let processingComplete = false;
 let processingStarted = false;
+let consecutiveWaitingCount = 0;
 
 // Función para comprobar si el procesamiento ha terminado
 async function checkProcessingStatus() {
@@ -19,6 +20,8 @@ async function checkProcessingStatus() {
         // Comprobar el estado del procesamiento
         const response = await fetch('/process_status');
         const data = await response.json();
+        
+        console.log("Estado del procesamiento:", data);
         
         // Actualizar el mensaje de carga según el estado
         updateLoadingMessage(data.message);
@@ -35,6 +38,16 @@ async function checkProcessingStatus() {
         } else if (data.status === 'processing') {
             // Si el procesamiento ha comenzado, actualizar la bandera
             processingStarted = true;
+            consecutiveWaitingCount = 0;
+        } else if (data.status === 'waiting') {
+            // Si seguimos esperando, incrementar el contador
+            consecutiveWaitingCount++;
+            
+            // Si hemos estado esperando demasiado tiempo (más de 10 segundos)
+            if (consecutiveWaitingCount > 10) {
+                showError("No se ha recibido la imagen. Por favor, vuelve e intenta capturar la foto de nuevo.");
+                return;
+            }
         }
         
         // Si el procesamiento sigue en curso, comprobar de nuevo después de un tiempo
@@ -69,31 +82,25 @@ function showError(message) {
     }
     
     // Añadir un botón para volver a la página principal
-    const backButton = document.createElement('button');
-    backButton.textContent = 'Volver a intentar';
-    backButton.className = 'back-button';
-    backButton.onclick = () => {
-        window.location.href = '/';
-    };
-    
     const container = document.querySelector('.rectangulo');
     if (container) {
-        container.appendChild(backButton);
+        // Si ya existe un botón, no crear otro
+        if (!document.querySelector('.back-button')) {
+            const backButton = document.createElement('button');
+            backButton.textContent = 'Volver a intentar';
+            backButton.className = 'back-button';
+            backButton.onclick = () => {
+                // Redirigir con parámetro de tiempo para forzar recarga
+                window.location.href = '/?reload=' + new Date().getTime();
+            };
+            container.appendChild(backButton);
+        }
     }
 }
 
 // Iniciar la comprobación del estado del procesamiento
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("Página de carga iniciada");
     // Esperar un poco antes de empezar a comprobar
     setTimeout(checkProcessingStatus, 1000);
-    
-    // Comprobar periódicamente si el procesamiento ha comenzado
-    const checkProcessingStarted = setInterval(() => {
-        if (processingStarted || processingComplete) {
-            clearInterval(checkProcessingStarted);
-        } else if (Date.now() - startTime > 10000) { // 10 segundos
-            // Si después de 10 segundos el procesamiento no ha comenzado, mostrar un mensaje
-            updateLoadingMessage("Esperando a que comience el procesamiento...");
-        }
-    }, 2000);
 });
