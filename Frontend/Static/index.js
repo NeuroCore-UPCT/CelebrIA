@@ -57,9 +57,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error("Error al limpiar datos anteriores:", error);
     }
     
+    // Setup gender checkboxes to work like radio buttons
+    setupGenderCheckboxes();
+    
     // Iniciar la webcam después de un pequeño retraso
     setTimeout(startWebcam, 300);
 });
+
+// Function to make checkboxes work like radio buttons
+function setupGenderCheckboxes() {
+    const femaleCheckbox = document.getElementById('gender-female');
+    const maleCheckbox = document.getElementById('gender-male');
+    
+    femaleCheckbox.addEventListener('change', () => {
+        if (femaleCheckbox.checked) {
+            maleCheckbox.checked = false;
+        }
+    });
+    
+    maleCheckbox.addEventListener('change', () => {
+        if (maleCheckbox.checked) {
+            femaleCheckbox.checked = false;
+        }
+    });
+}
 
 // Capturar la imagen cuando se haga clic en el botón
 document.getElementById("capturar-btn").addEventListener("click", async () => {
@@ -80,7 +101,15 @@ document.getElementById("capturar-btn").addEventListener("click", async () => {
         // Obtener la imagen en formato base64 (data URL)
         const imageData = canvas.toDataURL("image/jpeg", 0.9); // Use JPEG with 90% quality for smaller size
 
-        console.log("Imagen capturada, tamaño:", imageData.length);
+        // Get gender filter selection
+        let gender = null;
+        if (document.getElementById("gender-female").checked) {
+            gender = "0";  // Female
+        } else if (document.getElementById("gender-male").checked) {
+            gender = "1";  // Male
+        }
+
+        console.log("Imagen capturada, tamaño:", imageData.length, "género:", gender);
 
         // Detener la webcam antes de navegar a otra página
         stopWebcam();
@@ -94,7 +123,10 @@ document.getElementById("capturar-btn").addEventListener("click", async () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ image: imageData }),
+            body: JSON.stringify({ 
+                image: imageData,
+                gender: gender
+            }),
         })
         .then(response => response.json())
         .then(data => {

@@ -59,6 +59,9 @@ def process_image():
         # Get the image data from the request
         image_data = request.json.get('image')
         
+        # Get the gender filter if present
+        gender = request.json.get('gender')
+        
         # Remove the data URL prefix
         image_data = image_data.split(',')[1]
         
@@ -76,7 +79,7 @@ def process_image():
         cv2.imwrite(original_path, image)
         
         # Process the image and wait for results
-        results = procesar_imagen(original_path)
+        results = procesar_imagen(original_path, gender)
         
         # Check if we have valid results
         if not results or len(results) == 0:
@@ -301,20 +304,30 @@ def sacar_nombre_ruta(lista_rutas_celebridades):
     
     return nombres
 
-def encontrar_3_mas_parecidos(ruta_cara):
+def encontrar_3_mas_parecidos(ruta_cara, gender=None):
     """
     Encuentra las 3 imágenes más parecidas en la base de datos de celebrities.
     Usa celebrity2.py para encontrar coincidencias.
     
     :param ruta_cara: Ruta de la imagen de la cara a comparar.
+    :param gender: Filtro de género para la búsqueda.
     :return: Lista de rutas de las imágenes más parecidas y sus porcentajes de similitud.
     """
     try:
+        # Convert gender to float if it's provided as a string
+        gender_filter = None
+        if gender is not None:
+            try:
+                gender_filter = float(gender)
+                print(f"Using gender filter: {gender_filter}")
+            except ValueError:
+                print(f"Invalid gender value: {gender}, ignoring gender filter")
+        
         # Get the face embedding
         user_embedding = get_face_embedding(ruta_cara)
         
-        # Find similar celebrities (top 3)
-        top_matches = find_similar_celebrities(user_embedding, celebrity_df, top_n=3)
+        # Find similar celebrities (top 3) with gender filter
+        top_matches = find_similar_celebrities(user_embedding, celebrity_df, top_n=3, gender=gender_filter)
         
         # Extract paths and similarities
         rutas_imagen = []
@@ -391,16 +404,19 @@ def create_placeholder_image(path, text):
     # Save the image
     cv2.imwrite(path, img)
 
-def procesar_imagen(original_path):
+def procesar_imagen(original_path, gender=None):
     """Process the image using celebrity2.py and return the results"""
     # Detect faces
     lista_personas = detectar_personas(original_path)
     results = []
     
+    # Log the gender value received
+    print(f"Processing image with gender filter: {gender}")
+    
     # Process each detected face
     for i in range(len(lista_personas)):
-        # Find the 3 most similar celebrities
-        lista_ruta_famosos, lista_parecidos = encontrar_3_mas_parecidos(lista_personas[i])
+        # Find the 3 most similar celebrities with gender filter if provided
+        lista_ruta_famosos, lista_parecidos = encontrar_3_mas_parecidos(lista_personas[i], gender)
         
         # Extract celebrity names from paths
         lista_nombre_famosos = sacar_nombre_ruta(lista_ruta_famosos)

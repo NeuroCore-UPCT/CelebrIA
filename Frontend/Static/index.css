@@ -116,6 +116,48 @@ body {
     margin-bottom: 2vh;
 }
 
+/* Gender filter styling */
+.gender-filter {
+    margin-top: 1vh;
+    text-align: center;
+    width: 100%;
+}
+
+.gender-filter p {
+    margin: 0.5vh 0;
+    font-size: 1.2rem;
+}
+
+.checkbox-container {
+    display: flex;
+    justify-content: center;
+    gap: 1vw;
+    margin-top: 0.5vh;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: 0.2vw;
+    cursor: pointer;
+}
+
+.checkbox-container label {
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-left: 0;
+    margin-right: 1vw;
+}
+
+/* Make sure only one checkbox can be selected at a time (like radio buttons) */
+#gender-female:checked ~ #gender-male,
+#gender-male:checked ~ #gender-female {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 .robot {
     position: fixed;
     bottom: 1vh;
