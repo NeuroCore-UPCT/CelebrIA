@@ -363,7 +363,8 @@ def add_sample_images_to_db():
     """
     Añade imágenes de muestra a la base de datos si está vacía
     """
-    # Crear imágenes de muestra para pruebas
+    # crear imagen 2
+
     sample_images = {
         "Aamir_Khan.jpg": (0, 0, 255),  # Azul
         "Fawad_Khan.jpg": (0, 255, 0),  # Verde
